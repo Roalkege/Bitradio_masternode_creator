@@ -122,7 +122,7 @@ namespace Bitradio_masternode_creator
                 }
                 client.Disconnect();
             }
-
+            MessageBox.Show("local erstellt");
             //upload the file
             using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
             {
@@ -140,7 +140,8 @@ namespace Bitradio_masternode_creator
                     client.Dispose();
                 }
             }
-            
+
+            MessageBox.Show("gesendet");
             // execute the ./Bitradiod install script (self-made)
             using (var client = new SshClient(ip,/* Convert.ToInt16(port),*/ username, password))
             {
@@ -153,6 +154,7 @@ namespace Bitradio_masternode_creator
                 result = command.BeginExecute();
                 command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_creator/master/Bitradio_MN_tool.sh");  //download the script
                 result = command.BeginExecute();
+                MessageBox.Show("script erhalten");
                 command = client.CreateCommand("sudo bash Bitradio_MN_tool.sh");  //execute the script
                 result = command.BeginExecute();
 
