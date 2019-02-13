@@ -152,7 +152,7 @@ namespace Bitradio_masternode_creator
                 var result = command.BeginExecute();
                 command = client.CreateCommand("echo hello");  //execute the script
                 result = command.BeginExecute();
-                command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_tool/master/Bitradio_MN_tool.sh");  //download the script
+                command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_creator/master/Bitradio_MN_tool.sh");  //download the script
                 result = command.BeginExecute();
                 MessageBox.Show("script erhalten");
                 command = client.CreateCommand("sudo bash Bitradio_MN_tool.sh");  //execute the script
