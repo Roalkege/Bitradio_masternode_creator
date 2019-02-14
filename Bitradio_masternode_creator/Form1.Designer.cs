@@ -51,6 +51,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.masternodename_feld = new System.Windows.Forms.TextBox();
             this.startup_checkbox = new System.Windows.Forms.CheckBox();
+            this.update_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // create_masternode
@@ -257,11 +258,23 @@
             this.startup_checkbox.UseVisualStyleBackColor = true;
             this.startup_checkbox.CheckedChanged += new System.EventHandler(this.startup_checkbox_CheckedChanged);
             // 
+            // update_button
+            // 
+            this.update_button.Enabled = false;
+            this.update_button.Location = new System.Drawing.Point(893, 74);
+            this.update_button.Name = "update_button";
+            this.update_button.Size = new System.Drawing.Size(111, 44);
+            this.update_button.TabIndex = 26;
+            this.update_button.Text = "Update";
+            this.update_button.UseVisualStyleBackColor = true;
+            this.update_button.Click += new System.EventHandler(this.update_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1019, 584);
+            this.Controls.Add(this.update_button);
             this.Controls.Add(this.startup_checkbox);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.masternodename_feld);
@@ -317,6 +330,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox masternodename_feld;
         private System.Windows.Forms.CheckBox startup_checkbox;
+        private System.Windows.Forms.Button update_button;
     }
 }
 
