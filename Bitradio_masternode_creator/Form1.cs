@@ -13,6 +13,7 @@ using Microsoft.VisualBasic;
 using System.IO;
 using System.Diagnostics;
 using System.Collections;
+using System.Net;
 
 
 //Thanks to WlanWerner(https://github.com/WlanWerner)
@@ -317,53 +318,49 @@ namespace Bitradio_masternode_creator
 
         private void update_button_Click(object sender, EventArgs e)
         {
-            //var version_number = "Version 1.0.0";
-            //int c;
+            var version_number = "Version 1.0.0";
+            int c;
+            
+            string result = null;
+            string url = "https://brocoin.world/Nick/version.txt";
+            WebResponse response = null;
+            StreamReader reader = null;
 
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                response = request.GetResponse();
+                reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                result = reader.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                // handle error
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+                if (response != null)
+                    response.Close();
+            }
 
-
-
-            //string result = null;
-            //string url = "https://brocoin.world/Nick/version.txt";
-            //WebResponse response = null;
-            //StreamReader reader = null;
-
-            //try
-            //{
-            //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //    request.Method = "GET";
-            //    response = request.GetResponse();
-            //    reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-            //    result = reader.ReadToEnd();
-            //}
-            //catch (Exception ex)
-            //{
-            //    // handle error
-            //    MessageBox.Show(ex.Message);
-            //}
-            //finally
-            //{
-            //    if (reader != null)
-            //        reader.Close();
-            //    if (response != null)
-            //        response.Close();
-            //}
-
-            //c = String.Compare(result, version_number);
-            //MessageBox.Show(Convert.ToString(version_number + " " + result));
-            //if (Convert.ToBoolean(c))
-            //{
-            //    switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
-            //    {
-            //        case DialogResult.Yes: System.Diagnostics.Process.Start("http://google.com"); ; break;
-            //        case DialogResult.No: break;
-            //        case DialogResult.Cancel: break;
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("There is no Update available");
-            //}
+            c = String.Compare(result, version_number);
+            if (c == -1)
+            {
+                switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
+                {
+                    case DialogResult.Yes: System.Diagnostics.Process.Start("http://brocoin.world"); ; break;
+                    case DialogResult.No: break;
+                    case DialogResult.Cancel: break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("There is no Update available", "Update", MessageBoxButtons.OK);
+            }
         }
     }
 }

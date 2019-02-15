@@ -250,6 +250,7 @@
             // startup_checkbox
             // 
             this.startup_checkbox.AutoSize = true;
+            this.startup_checkbox.Enabled = false;
             this.startup_checkbox.Location = new System.Drawing.Point(25, 198);
             this.startup_checkbox.Name = "startup_checkbox";
             this.startup_checkbox.Size = new System.Drawing.Size(302, 17);
@@ -260,8 +261,7 @@
             // 
             // update_button
             // 
-            this.update_button.Enabled = false;
-            this.update_button.Location = new System.Drawing.Point(893, 74);
+            this.update_button.Location = new System.Drawing.Point(893, 79);
             this.update_button.Name = "update_button";
             this.update_button.Size = new System.Drawing.Size(111, 44);
             this.update_button.TabIndex = 26;
