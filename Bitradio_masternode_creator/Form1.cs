@@ -85,7 +85,7 @@ namespace Bitradio_masternode_creator
 
 
             //login and create connection
-            using (var client = new SshClient(ip,/* Convert.ToInt16(port),*/ username, password))
+            using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
             {
 
                 // check if everything givem
@@ -144,7 +144,7 @@ namespace Bitradio_masternode_creator
 
             MessageBox.Show("gesendet");
             // execute the ./Bitradiod install script (self-made)
-            using (var client = new SshClient(ip,/* Convert.ToInt16(port),*/ username, password))
+            using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
             {
 
                 client.Connect();
@@ -268,21 +268,9 @@ namespace Bitradio_masternode_creator
             port = port_feld.Text;
             username = username_feld.Text;
             password = password_feld.Text;
-            genkey = genkey_feld.Text;
-            string TEMP_PATH = Path.GetTempPath();
 
             //login and create connection
-
-            //create the lokale file
-            if (!File.Exists(TEMP_PATH + genkey))
-            {
-                using (StreamWriter sw = new StreamWriter(Environment.ExpandEnvironmentVariables(TEMP_PATH + genkey), true))
-                {
-
-                }
-            }
-
-
+            //need a test!!
             using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
             {
                 try
@@ -311,6 +299,7 @@ namespace Bitradio_masternode_creator
             }
         }
 
+        //check for update
         private void startup_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             //will be added in future
@@ -318,11 +307,11 @@ namespace Bitradio_masternode_creator
 
         private void update_button_Click(object sender, EventArgs e)
         {
-            var version_number = "Version 1.0.0";
+            var version_number = "Version 1.0.0";   //app verion
             int c;
             
             string result = null;
-            string url = "https://brocoin.world/Nick/version.txt";
+            string url = "https://brocoin.world/Nick/version.txt";  //checks the website and get the latest build verion
             WebResponse response = null;
             StreamReader reader = null;
 
@@ -347,17 +336,18 @@ namespace Bitradio_masternode_creator
                     response.Close();
             }
 
+            //compare app version and download version
             c = String.Compare(result, version_number);
-            if (c == -1)
+            
+            if (c == -1)    //if available
             {
                 switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
                 {
-                    case DialogResult.Yes: System.Diagnostics.Process.Start("http://brocoin.world"); ; break;
+                    case DialogResult.Yes: System.Diagnostics.Process.Start("http://brocoin.world"); ; break;   //opens the default browser
                     case DialogResult.No: break;
-                    case DialogResult.Cancel: break;
                 }
             }
-            else
+            else    //no new version
             {
                 MessageBox.Show("There is no Update available", "Update", MessageBoxButtons.OK);
             }
