@@ -107,7 +107,7 @@ namespace Bitradio_masternode_creator
 
                 // Crappy way!! I don't know how to transfer a lokal variable to the vps. So I create lokal a file with the genkey as name, upload it 
                 // to the vps and read the new created directory. The output is the genkey :D
-                
+
                 var command = client.CreateCommand("mkdir /root/temp_bitradio/");
                 var result = command.BeginExecute();
                 command = client.CreateCommand("cd /root/temp_bitradio/");
@@ -255,7 +255,8 @@ namespace Bitradio_masternode_creator
 
                 var command = client.CreateCommand("./Bitradiod masternode status");
                 var result = command.Execute();
-                log_feld.Text = result;
+                log_feld.Text = result +
+                    "\r\n" + "\r\n" + "If the Node shows Status 9 and notCapableReason : Could not find suitable coins! than everything works fine!!!";
                 client.Disconnect();
             }
         }
@@ -270,7 +271,7 @@ namespace Bitradio_masternode_creator
             password = password_feld.Text;
 
             //login and create connection
-            //need a test!!
+            //still in test!!!
             using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
             {
                 try
@@ -286,30 +287,28 @@ namespace Bitradio_masternode_creator
                 var command = client.CreateCommand("cd ~");
                 var result = command.Execute();
                 command = client.CreateCommand("./Bitradiod stop");  //stops the node
-                result = command.Execute();
-                log_feld.Text = result + "/r/n";
-                System.Threading.Thread.Sleep(500);
-                command = client.CreateCommand("killall ./Bitradiod");  // kills the node process
-                result = command.Execute();
-                log_feld.Text = result + "/r/n";
-                command = client.CreateCommand("./Bitradiod -daemon");  // starts the wallet
-                result = command.Execute();
-                log_feld.Text = result + "/r/n";
+                //result = command.Execute();
+                //System.Threading.Thread.Sleep(500);
+                //command = client.CreateCommand("killall ./Bitradiod");  // kills the node process
+                //result = command.Execute();
+                command = client.CreateCommand("./Bitradiod");  // starts the wallet
+                result = command.Execute();;
                 client.Disconnect();
             }
         }
 
-        //check for update
+        //starts ./Bitradiod with startup and creates a cronjob
         private void startup_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             //will be added in future
         }
 
+        //check for update
         private void update_button_Click(object sender, EventArgs e)
         {
             var version_number = "Version 1.0.0";   //app verion
             int c;
-            
+
             string result = null;
             string url = "https://brocoin.world/Nick/version.txt";  //checks the website and get the latest build verion
             WebResponse response = null;
@@ -338,7 +337,7 @@ namespace Bitradio_masternode_creator
 
             //compare app version and download version
             c = String.Compare(result, version_number);
-            
+
             if (c == -1)    //if available
             {
                 switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
