@@ -200,12 +200,11 @@
             // 
             // restart_masternode
             // 
-            this.restart_masternode.Enabled = false;
             this.restart_masternode.Location = new System.Drawing.Point(553, 142);
             this.restart_masternode.Name = "restart_masternode";
             this.restart_masternode.Size = new System.Drawing.Size(334, 44);
             this.restart_masternode.TabIndex = 20;
-            this.restart_masternode.Text = "(Re)Start Masternode   ***Disabled***";
+            this.restart_masternode.Text = "(Re)Start Masternode   ***Beta***";
             this.restart_masternode.UseVisualStyleBackColor = true;
             this.restart_masternode.Click += new System.EventHandler(this.restart_masternode_Click);
             // 
