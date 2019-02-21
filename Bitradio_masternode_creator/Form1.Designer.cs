@@ -249,7 +249,6 @@
             // startup_checkbox
             // 
             this.startup_checkbox.AutoSize = true;
-            this.startup_checkbox.Enabled = false;
             this.startup_checkbox.Location = new System.Drawing.Point(25, 198);
             this.startup_checkbox.Name = "startup_checkbox";
             this.startup_checkbox.Size = new System.Drawing.Size(302, 17);

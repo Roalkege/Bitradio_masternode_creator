@@ -82,106 +82,205 @@ namespace Bitradio_masternode_creator
             string TEMP_PATH = Path.GetTempPath();
 
 
-
-
-            //login and create connection
-            using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
+            if (startup_checkbox.Checked)
             {
 
-                // check if everything givem
-                try
+                //login and create connection
+                using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
                 {
-                    client.Connect();
-                    //port = null;
-                    //masternodename = null;
-                    //output_after = null;
-                    //genkey = null;
-                    //output = null;
-                }
-                catch
-                {
-                    MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
-                    return;
-                }
 
-
-                // Crappy way!! I don't know how to transfer a lokal variable to the vps. So I create lokal a file with the genkey as name, upload it 
-                // to the vps and read the new created directory. The output is the genkey :D
-
-                var command = client.CreateCommand("mkdir /root/temp_bitradio/");
-                var result = command.BeginExecute();
-                command = client.CreateCommand("cd /root/temp_bitradio/");
-                result = command.BeginExecute();
-
-                //create the lokale file
-                if (!File.Exists(TEMP_PATH + genkey))
-                {
-                    using (StreamWriter sw = new StreamWriter(Environment.ExpandEnvironmentVariables(TEMP_PATH + genkey), true))
+                    // check if everything givem
+                    try
                     {
-
+                        client.Connect();
+                        //port = null;
+                        //masternodename = null;
+                        //output_after = null;
+                        //genkey = null;
+                        //output = null;
                     }
-                }
-                client.Disconnect();
-            }
-            MessageBox.Show("local erstellt");
-            //upload the file
-            using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
-            {
-                client.Connect();
-
-                FileInfo f = new FileInfo(TEMP_PATH + genkey);
-                string uploadfile = f.FullName;
-
-                var fileStream = new FileStream(uploadfile, FileMode.Open);
-                if (fileStream != null)
-                {
-
-                    client.UploadFile(fileStream, "/root/temp_bitradio/" + f.Name, null);
-                    client.Disconnect();
-                    client.Dispose();
-                }
-            }
-
-            MessageBox.Show("gesendet");
-            // execute the ./Bitradiod install script (self-made)
-            using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
-            {
-
-                client.Connect();
-
-                var command = client.CreateCommand("cd ~");
-                var result = command.BeginExecute();
-                command = client.CreateCommand("echo hello");  //execute the script
-                result = command.BeginExecute();
-                command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_creator/master/Bitradio_MN_tool.sh");  //download the script
-                result = command.BeginExecute();
-                command = client.CreateCommand("sudo bash Bitradio_MN_tool.sh");  //execute the script
-                result = command.BeginExecute();
-
-                //log vps output 
-                using (var reader =
-                   new StreamReader(command.OutputStream, Encoding.UTF8, true, 1024, true))
-                {
-                    while (!result.IsCompleted || !reader.EndOfStream)
+                    catch
                     {
-                        string line = reader.ReadLine();
-                        if (line != null)
+                        MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
+                        return;
+                    }
+
+
+                    // Crappy way!! I don't know how to transfer a lokal variable to the vps. So I create lokal a file with the genkey as name, upload it 
+                    // to the vps and read the new created directory. The output is the genkey :D
+
+                    var command = client.CreateCommand("mkdir /root/temp_bitradio/");
+                    var result = command.BeginExecute();
+                    command = client.CreateCommand("cd /root/temp_bitradio/");
+                    result = command.BeginExecute();
+
+                    //create the lokale file
+                    if (!File.Exists(TEMP_PATH + genkey))
+                    {
+                        using (StreamWriter sw = new StreamWriter(Environment.ExpandEnvironmentVariables(TEMP_PATH + genkey), true))
                         {
-                            log_feld.Invoke(
-                                (MethodInvoker)(() =>
-                                    log_feld.AppendText(line + Environment.NewLine)));
+
                         }
                     }
+                    client.Disconnect();
+                }
+                MessageBox.Show("local erstellt");
+                //upload the file
+                using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
+                {
+                    client.Connect();
+
+                    FileInfo f = new FileInfo(TEMP_PATH + genkey);
+                    string uploadfile = f.FullName;
+
+                    var fileStream = new FileStream(uploadfile, FileMode.Open);
+                    if (fileStream != null)
+                    {
+
+                        client.UploadFile(fileStream, "/root/temp_bitradio/" + f.Name, null);
+                        client.Disconnect();
+                        client.Dispose();
+                    }
                 }
 
-                command.EndExecute(result);
+                MessageBox.Show("gesendet");
+                // execute the ./Bitradiod install script (self-made)
+                using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
+                {
+
+                    client.Connect();
+
+                    var command = client.CreateCommand("./Bitradiod getblockcount");
+                    var result = command.BeginExecute();
+                    command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_creator/master/Bitradio_MN_tool_cron.sh && bash Bitradio_MN_tool_cron.sh");  //download the script
+                    result = command.BeginExecute();
+
+                    //log vps output 
+                    using (var reader =
+                       new StreamReader(command.OutputStream, Encoding.UTF8, true, 1024, true))
+                    {
+                        while (!result.IsCompleted || !reader.EndOfStream)
+                        {
+                            string line = reader.ReadLine();
+                            if (line != null)
+                            {
+                                log_feld.Invoke(
+                                    (MethodInvoker)(() =>
+                                        log_feld.AppendText(line + Environment.NewLine)));
+                            }
+                        }
+                    }
+
+                    command.EndExecute(result);
 
 
-                command = client.CreateCommand("cd ~");
-                result = command.BeginExecute();
-                command = client.CreateCommand("rm Bitradio_MN_tool.sh");  //remove the script
-                result = command.BeginExecute();
-                client.Disconnect();
+                    command = client.CreateCommand("cd ~");
+                    result = command.BeginExecute();
+                    command = client.CreateCommand("rm Bitradio_MN_tool.sh");  //remove the script
+                    result = command.BeginExecute();
+                    MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
+                    client.Disconnect();
+                }
+            }
+
+            else
+            {
+                //login and create connection
+                using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
+                {
+
+                    // check if everything givem
+                    try
+                    {
+                        client.Connect();
+                        //port = null;
+                        //masternodename = null;
+                        //output_after = null;
+                        //genkey = null;
+                        //output = null;
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
+                        return;
+                    }
+
+
+                    // Crappy way!! I don't know how to transfer a lokal variable to the vps. So I create lokal a file with the genkey as name, upload it 
+                    // to the vps and read the new created directory. The output is the genkey :D
+
+                    var command = client.CreateCommand("mkdir /root/temp_bitradio/");
+                    var result = command.BeginExecute();
+                    command = client.CreateCommand("cd /root/temp_bitradio/");
+                    result = command.BeginExecute();
+
+                    //create the lokale file
+                    if (!File.Exists(TEMP_PATH + genkey))
+                    {
+                        using (StreamWriter sw = new StreamWriter(Environment.ExpandEnvironmentVariables(TEMP_PATH + genkey), true))
+                        {
+
+                        }
+                    }
+                    client.Disconnect();
+                }
+                MessageBox.Show("local erstellt");
+                //upload the file
+                using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
+                {
+                    client.Connect();
+
+                    FileInfo f = new FileInfo(TEMP_PATH + genkey);
+                    string uploadfile = f.FullName;
+
+                    var fileStream = new FileStream(uploadfile, FileMode.Open);
+                    if (fileStream != null)
+                    {
+
+                        client.UploadFile(fileStream, "/root/temp_bitradio/" + f.Name, null);
+                        client.Disconnect();
+                        client.Dispose();
+                    }
+                }
+
+                MessageBox.Show("gesendet");
+                // execute the ./Bitradiod install script (self-made)
+                using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
+                {
+
+                    client.Connect();
+
+                    var command = client.CreateCommand("./Bitradiod getblockcount");
+                    var result = command.BeginExecute();
+                    command = client.CreateCommand("sudo wget https://raw.githubusercontent.com/Roalkege/bitradio_masternode_creator/master/Bitradio_MN_tool.sh && bash Bitradio_MN_tool.sh");  //download the script
+                    result = command.BeginExecute();
+
+                    //log vps output 
+                    using (var reader =
+                       new StreamReader(command.OutputStream, Encoding.UTF8, true, 1024, true))
+                    {
+                        while (!result.IsCompleted || !reader.EndOfStream)
+                        {
+                            string line = reader.ReadLine();
+                            if (line != null)
+                            {
+                                log_feld.Invoke(
+                                    (MethodInvoker)(() =>
+                                        log_feld.AppendText(line + Environment.NewLine)));
+                            }
+                        }
+                    }
+
+                    command.EndExecute(result);
+
+
+                    command = client.CreateCommand("cd ~");
+                    result = command.BeginExecute();
+                    command = client.CreateCommand("rm Bitradio_MN_tool.sh");  //remove the script
+                    result = command.BeginExecute();
+                    MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
+                    client.Disconnect();
+                }
             }
 
             //edit the lokal masternode.conf 
@@ -190,13 +289,6 @@ namespace Bitradio_masternode_creator
                 sw.Write(masternodename + " " + ip + ":32454 " + genkey + " " + output + " " + output_after + " " + "\r\n");
 
             }
-
-
-
-            //finish
-            //MessageBox.Show("Masternode success full instaled." + "/r/n"
-            //    + "Please start the node over your windows wallet.");
-
         }
 
 
@@ -292,7 +384,7 @@ namespace Bitradio_masternode_creator
                 //command = client.CreateCommand("killall ./Bitradiod");  // kills the node process
                 //result = command.Execute();
                 command = client.CreateCommand("./Bitradiod");  // starts the wallet
-                result = command.Execute();;
+                result = command.Execute(); ;
                 client.Disconnect();
             }
         }
