@@ -32,17 +32,47 @@ namespace Bitradio_masternode_creator
         public string output_after;
         public string masternodename;
         public string port;
-
+        public string language_info;
 
         public Form1()
         {
             InitializeComponent();
-            MessageBox.Show("I take no responsibility for this program." + "\r\n"
-                      + "Use this program with caution." + "\r\n"
-                      + "I take no responsibility for lost coins and/or their VPS." + "\r\n"
-                      + "I can't get in touch with their coins." + "\r\n"
-                      + "Please encrypt your wallet anyway and make a note of your password." + "\r\n"
-                      + "Check also my Code(it's open Source) and don't flame I'm a student :D");
+            language_info = System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;
+            if (language_info == "deu")
+            {
+                MessageBox.Show("Ich übernehme keine Verantwortung für dieses Programm." + "\r\n"
+                      + "Verwenden Sie dieses Programm mit Vorsicht." + "\r\n"
+                      + "Ich übernehme keine Verantwortung für verlorene Jumps und/oder für Ihren VPS." + "\r\n"
+                      + "Ich komme keineswegs in kontakt mit Ihren Jumps." + "\r\n"
+                      + "Bitte verschlüsseln Sie Ihre Wallet trotzdem und notieren Sie sich Ihr Passwort." + "\r\n"
+                      + "Überprüfen Sie auch meinen Code(es ist Open Source) und flammen Sie nicht ich bin ein Schüler :D", "Information");
+                this.check_masternode.Text = "Masternode überprüfen";
+                this.label4.Text = "Serverpasswort";
+                this.label3.Text = "Benutzername";
+                this.label2.Text = "Serveradresse";
+                this.create_masternode.Text = "Installiere Masternode";
+                this.restart_masternode.Text = "Masternode (neu)starten   ***Beta***";
+                this.button4.Text = "Hilfe";
+                this.startup_checkbox.Text = "Starte Masternode beim Hochfahren   ***Beta***";
+                this.Text = "Masternode Installierer";
+            }
+
+            else if (language_info == "rus")
+            {
+                MessageBox.Show("Я не беру на себя ответственность за эту программу." + "\r\n"
+                    + "Используйте эту программу с осторожностью." + "\r\n"
+                    + "Я не беру на себя ответственность за потерянные монеты и/или их VPS." + "\r\n"
+                    + "Я не имею доступ к монетам на них." + "\r\n"
+                    + "Пожалуйста, в любом случае зашифруйте Ваш кошелек и запишите свой пароль." + "\r\n"
+                    + "Также можете проверить мой код (он с открытым исходным кодом) и не флеймите сильно – я студент :D");
+            }
+            else
+                MessageBox.Show("I take no responsibility for this program." + "\r\n"
+                          + "Use this program with caution." + "\r\n"
+                          + "I take no responsibility for lost coins and/or their VPS." + "\r\n"
+                          + "I can't get in touch with their coins." + "\r\n"
+                          + "Please encrypt your wallet anyway and make a note of your password." + "\r\n"
+                          + "Check also my Code(it's open Source) and don't flame I'm a student :D");
         }
 
         // Install the ./Bitradiod
@@ -101,7 +131,12 @@ namespace Bitradio_masternode_creator
                     }
                     catch
                     {
-                        MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
+                        if (language_info == "deu")
+                            MessageBox.Show("Bitte fülle die Felder IP, Benutzername, Benutzerpasswort, rcuser und rpcpasswort aus!");
+                        else if (language_info == "rus")
+                            MessageBox.Show("Пожалуйста, укажите IP, пользователя, пароль, ключ (genkey), порт, выход, число после выхода и имя мастерноды!");
+                        else
+                            MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
                         return;
                     }
 
@@ -124,7 +159,7 @@ namespace Bitradio_masternode_creator
                     }
                     client.Disconnect();
                 }
-                MessageBox.Show("local erstellt");
+
                 //upload the file
                 using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
                 {
@@ -143,7 +178,6 @@ namespace Bitradio_masternode_creator
                     }
                 }
 
-                MessageBox.Show("gesendet");
                 // execute the ./Bitradiod install script (self-made)
                 using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
                 {
@@ -178,7 +212,12 @@ namespace Bitradio_masternode_creator
                     result = command.BeginExecute();
                     command = client.CreateCommand("rm Bitradio_MN_tool.sh");  //remove the script
                     result = command.BeginExecute();
-                    MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
+                    if (language_info == "ger")
+                        MessageBox.Show("Masternode wurde installiert, starte jetzt deine Windows Wallet neu und starte den Alias");
+                    else if (language_info == "rus")
+                        MessageBox.Show("Мастернода установлена, теперь перезагрузите кошелек и начните работать в режиме анонимности.");
+                    else
+                        MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
                     client.Disconnect();
                 }
             }
@@ -201,7 +240,12 @@ namespace Bitradio_masternode_creator
                     }
                     catch
                     {
-                        MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
+                        if (language_info == "deu")
+                            MessageBox.Show("Bitte fülle die Felder IP, Benutzername, Benutzerpasswort, rcuser und rpcpasswort aus!");
+                        else if (language_info == "rus")
+                            MessageBox.Show("Пожалуйста, укажите IP, пользователя, пароль, ключ (genkey), порт, выход, число после выхода и имя мастерноды!");
+                        else
+                            MessageBox.Show("Please fill out the IP, user, password, genkey, port, output, after_output and masternodename!");  //if not
                         return;
                     }
 
@@ -224,7 +268,6 @@ namespace Bitradio_masternode_creator
                     }
                     client.Disconnect();
                 }
-                MessageBox.Show("local erstellt");
                 //upload the file
                 using (var client = new SftpClient(ip, Convert.ToInt16(port), username, password))
                 {
@@ -243,7 +286,6 @@ namespace Bitradio_masternode_creator
                     }
                 }
 
-                MessageBox.Show("gesendet");
                 // execute the ./Bitradiod install script (self-made)
                 using (var client = new SshClient(ip, Convert.ToInt16(port), username, password))
                 {
@@ -278,7 +320,12 @@ namespace Bitradio_masternode_creator
                     result = command.BeginExecute();
                     command = client.CreateCommand("rm Bitradio_MN_tool.sh");  //remove the script
                     result = command.BeginExecute();
-                    MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
+                    if (language_info == "ger")
+                        MessageBox.Show("Masternode wurde installiert, starte jetzt deine Windows Wallet neu und starte den Alias");
+                    else if (language_info == "rus")
+                        MessageBox.Show("Мастернода установлена, теперь перезагрузите кошелек и начните работать в режиме анонимности.");
+                    else
+                        MessageBox.Show("Masternode installed now restart your windows wallet and start the Alias");
                     client.Disconnect();
                 }
             }
@@ -341,12 +388,24 @@ namespace Bitradio_masternode_creator
                 }
                 catch
                 {
+                    if (language_info == "ger")
+                        MessageBox.Show("Bitte fülle die Felder IP, Benutzername und Benutzerpasswort aus!");
+                    else if (language_info == "rus")
+                        MessageBox.Show("Пожалуйста, заполните IP, пользователя и пароль!");
+                    else
                     MessageBox.Show("Please fill out the IP, user and password!"); //If can't connect
                     return;
                 }
 
                 var command = client.CreateCommand("./Bitradiod masternode status");
                 var result = command.Execute();
+                if (language_info == "deu")
+                    log_feld.Text = result +
+                        "\r\n" + "\r\n" + "Wenn der Masternode Status Status 9 and notCapableReason : Could not find suitable coins! íst, ist die Masternode aktiviert und läuft!!!";
+                else if (language_info == "rus")
+                    log_feld.Text = result +
+                        "\r\n" + "\r\n" + "Если нода показывает Status 9 and notCapableReason : Could not find suitable coins! значит все работает отлично!!!";
+                else
                 log_feld.Text = result +
                     "\r\n" + "\r\n" + "If the Node shows Status 9 and notCapableReason : Could not find suitable coins! than everything works fine!!!";
                 client.Disconnect();
@@ -372,7 +431,12 @@ namespace Bitradio_masternode_creator
                 }
                 catch
                 {
-                    MessageBox.Show("Please fill out the IP, user and password!");  //If can't connect
+                    if (language_info == "ger")
+                        MessageBox.Show("Bitte fülle die Felder IP, Benutzername und Benutzerpasswort aus!");
+                    else if (language_info == "rus")
+                        MessageBox.Show("Пожалуйста, заполните IP, пользователя и пароль!");
+                    else
+                        MessageBox.Show("Please fill out the IP, user and password!");  //If can't connect
                     return;
                 }
 
@@ -432,7 +496,22 @@ namespace Bitradio_masternode_creator
 
             if (c == -1)    //if available
             {
-                switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
+                if (language_info == "deu")
+                    switch (MessageBox.Show("Es ist ein Update verfügbar", "Update", MessageBoxButtons.YesNo))
+
+                    {
+                        case DialogResult.Yes: System.Diagnostics.Process.Start("http://jumpcoin.club"); ; break;
+                        case DialogResult.No: break;
+                    }
+                else if (language_info == "rus")
+                    switch (MessageBox.Show("Доступно обновление", "Обновить", MessageBoxButtons.YesNo))
+
+                    {
+                        case DialogResult.Yes: System.Diagnostics.Process.Start("http://jumpcoin.club"); ; break;
+                        case DialogResult.No: break;
+                    }
+                else
+                    switch (MessageBox.Show("There is a Update available", "Update", MessageBoxButtons.YesNo))
                 {
                     case DialogResult.Yes: System.Diagnostics.Process.Start("http://brocoin.world"); ; break;   //opens the default browser
                     case DialogResult.No: break;
@@ -440,7 +519,12 @@ namespace Bitradio_masternode_creator
             }
             else    //no new version
             {
-                MessageBox.Show("There is no Update available", "Update", MessageBoxButtons.OK);
+                if (language_info == "deu")
+                    MessageBox.Show("Kein Update verfügbar");
+                else if (language_info == "rus")
+                    MessageBox.Show("Kein Update verfügbar");
+                else
+                    MessageBox.Show("There is no Update available", "Update", MessageBoxButtons.OK);
             }
         }
     }

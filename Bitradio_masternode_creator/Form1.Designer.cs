@@ -88,7 +88,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(26, 64);
+            this.label3.Location = new System.Drawing.Point(15, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 6;
@@ -122,7 +122,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(254, 64);
+            this.label5.Location = new System.Drawing.Point(227, 64);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 13);
             this.label5.TabIndex = 10;
@@ -139,7 +139,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(26, 170);
+            this.label6.Location = new System.Drawing.Point(15, 170);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 13);
             this.label6.TabIndex = 12;
@@ -156,7 +156,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(31, 117);
+            this.label8.Location = new System.Drawing.Point(15, 117);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(39, 13);
             this.label8.TabIndex = 16;
@@ -249,7 +249,7 @@
             // startup_checkbox
             // 
             this.startup_checkbox.AutoSize = true;
-            this.startup_checkbox.Location = new System.Drawing.Point(25, 198);
+            this.startup_checkbox.Location = new System.Drawing.Point(18, 198);
             this.startup_checkbox.Name = "startup_checkbox";
             this.startup_checkbox.Size = new System.Drawing.Size(302, 17);
             this.startup_checkbox.TabIndex = 25;
