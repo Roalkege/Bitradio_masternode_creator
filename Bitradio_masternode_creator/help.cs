@@ -56,5 +56,11 @@ namespace Bitradio_masternode_creator
         {
 
         }
+
+        private void donate_button_Click(object sender, EventArgs e)
+        {
+            Bitradio_Masternode_Creator.donate_form newForm2 = new Bitradio_Masternode_Creator.donate_form();
+            newForm2.ShowDialog();
+        }
     }
 }

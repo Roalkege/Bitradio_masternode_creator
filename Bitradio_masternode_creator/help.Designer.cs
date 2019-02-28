@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(help));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.donate_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -54,11 +55,22 @@
             this.label2.Visible = false;
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
+            // donate_button
+            // 
+            this.donate_button.Location = new System.Drawing.Point(37, 179);
+            this.donate_button.Name = "donate_button";
+            this.donate_button.Size = new System.Drawing.Size(96, 28);
+            this.donate_button.TabIndex = 2;
+            this.donate_button.Text = "Donate";
+            this.donate_button.UseVisualStyleBackColor = true;
+            this.donate_button.Click += new System.EventHandler(this.donate_button_Click);
+            // 
             // help
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 184);
+            this.ClientSize = new System.Drawing.Size(671, 218);
+            this.Controls.Add(this.donate_button);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -73,5 +85,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button donate_button;
     }
 }
