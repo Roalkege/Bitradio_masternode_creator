@@ -259,6 +259,7 @@
             // 
             // update_button
             // 
+            this.update_button.Enabled = false;
             this.update_button.Location = new System.Drawing.Point(893, 79);
             this.update_button.Name = "update_button";
             this.update_button.Size = new System.Drawing.Size(111, 44);
