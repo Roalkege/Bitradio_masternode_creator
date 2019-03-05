@@ -78,4 +78,4 @@ echo Your node is installed, now go to your Windows wallet and start the Mastern
 chmod 777 Bitradiod
 ./Bitradiod -daemon
 ./Bitradiod getblockcount
-
+exit
